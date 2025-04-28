@@ -1,0 +1,62 @@
+<template>
+  <div class="bar-container">
+    <div class="bar-title">Horse Racing</div>
+    <div>
+      <button @click="generateProgram" class="buttons">Generate Program</button>
+      <button @click="toggleStatus" class="buttons">Start / Pause</button>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+// import { defineEmits } from 'vue'
+type Props = {
+  status: 'started' | 'paused'
+}
+const props = defineProps<Props>()
+
+type Emit = {
+  (e: 'generateProgram'): void
+  (e: 'update:status', value: string): void
+}
+const emit = defineEmits<Emit>()
+
+function generateProgram() {
+  console.log('generateProgram')
+  emit('generateProgram')
+}
+
+function toggleStatus() {
+  switch (props.status) {
+    case 'started':
+      emit('update:status', 'paused')
+      break
+    case 'paused':
+      emit('update:status', 'started')
+      break
+    default:
+      console.log('status', props.status)
+  }
+}
+</script>
+
+<style scoped>
+.bar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+
+  padding: 0px 50px;
+  background-color: blueviolet;
+  height: 100px;
+}
+.bar-title {
+  font-size: larger;
+  font-weight: 500;
+}
+.buttons {
+  margin: 0px 10px;
+}
+</style>
