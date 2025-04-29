@@ -1,11 +1,11 @@
 <template>
   <div class="bar-container">
-    <div class="title">Horse List (1-{{ props.horseList.length }})</div>
+    <div class="title">Horse List (1-{{ props.horses.length }})</div>
     <div class="horse-list">
       <div class="list-item list-header">Name</div>
       <div class="list-item list-header">Condition</div>
       <div class="list-item list-header">Color</div>
-      <template v-for="(horse, index) in props.horseList" :key="`horse_${index}_${horse.name}`">
+      <template v-for="(horse, index) in props.horses" :key="`horse_${index}_${horse.id}`">
         <div class="list-item">{{ horse.name }}</div>
         <div class="list-item">{{ horse.condition }}</div>
         <div class="list-item">{{ horse.color }}</div>
@@ -18,10 +18,10 @@
 import type { Horse } from '@/types'
 
 type Props = {
-  horseList: Horse[]
+  horses: Horse[]
 }
 const props = withDefaults(defineProps<Props>(), {
-  horseList: () => [],
+  horses: () => [],
 })
 </script>
 

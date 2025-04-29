@@ -4,26 +4,27 @@
   </header>
 
   <main>
-    <div style="display: flex; justify-content: space-between; gap: 20px">
-      <HorseList :horseList="horses" />
-      <RaceAnimation
-        :status="status"
-        :program="program"
-        :resetTrigger="resetTrigger"
-        style="flex: 1 0 auto"
-        @update:status="setStatus"
-        @update:result="updateResult"
-      />
-      <div style="display: flex">
-        <RacePrograms :program="program" />
-        <RaceResults :results="results" />
-      </div>
-    </div>
+    <HorseList :horses="horses" />
+    <RaceAnimation
+      :status="status"
+      :program="program"
+      :horses="horses"
+      :resetTrigger="resetTrigger"
+      style="flex: 1 0 auto"
+      @update:status="setStatus"
+      @update:result="updateResult"
+    />
+    <ProgramDetails
+      :program="program"
+      :results="results"
+      :horses="horses"
+      style="display: flex; width: 350px"
+    />
   </main>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { PROGRAM, HORSE, RESULT } from '@/utils'
 import type { Horse, Program, ProgramResults, Result, LapName } from '@/types'
 
@@ -68,43 +69,21 @@ function generateProgram() {
 function updateResult(event: { roundName: LapName; results: Result[] }) {
   results.value[event.roundName] = event.results
 }
-
-onMounted(() => {
-  //horses.value = generateHorses()
-})
 </script>
 <style scoped>
 header {
   line-height: 1.5;
 }
 
-/* .logo {
-  display: block;
-} */
-
 main {
-  margin-top: 10px;
-  padding: 0px 30px;
+  display: flex;
+  justify-content: space-between;
+  gap: 50px;
 
-  height: 100%;
-  overflow: hidden; /* 🚫 Disable scrollbars on page */
-}
+  background-color: rgb(201, 201, 201);
+  padding: 10px 30px;
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    /* padding-right: calc(var(--section-gap) / 2); */
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+  height: 838px;
+  overflow-y: hidden;
 }
 </style>

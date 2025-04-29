@@ -24,16 +24,18 @@
 </template>
 
 <script setup lang="ts">
-import type { ProgramResults, LapName } from '@/types'
+import type { ProgramResults, LapName, Horse } from '@/types'
 
 type Props = {
   results: ProgramResults
+  horses: Horse[]
 }
 const props = defineProps<Props>()
 
 function getHorseName(id: string) {
+  const horse = props.horses.find((h) => h.id == id)
+  return horse ? horse.name : '-'
   // TODO: search from store
-  return id
 }
 
 function getRoundTitle(roundNum: number, name: string): string {
@@ -56,10 +58,10 @@ function getRoundResult(name: string) {
 </script>
 
 <style scoped>
-.scroll-container {
-  height: 100%; /* or a fixed height like 300px */
+/* .scroll-container {
+  height: 100%;
   overflow-y: scroll;
-}
+} */
 .title {
   background-color: green;
   color: black;

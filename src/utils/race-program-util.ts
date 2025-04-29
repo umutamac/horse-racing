@@ -35,3 +35,16 @@ export function isProgramEmpty(program: Program): boolean {
     return !Object.values(program).every(lap => lap.length == 10);
 }
 
+export function getRoundTitle(roundNum: number, name: string): string {
+    switch (roundNum) {
+        case 1:
+            return `1st Lap - ${name}`
+        case 2:
+            return `2nd Lap - ${name}`
+        case 3:
+            return `3rd Lap - ${name}`
+        default:
+            // assume less than 10 rounds
+            return `${roundNum}th Lap - ${name}`
+    }
+}

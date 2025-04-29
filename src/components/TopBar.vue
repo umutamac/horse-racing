@@ -47,9 +47,9 @@ function toggleStatus() {
   flex-wrap: wrap;
   width: 100%;
 
-  padding: 0px 50px;
-  background-color: blueviolet;
-  height: 100px;
+  padding: 0px 30px;
+  background-color: rgb(250, 130, 180);
+  height: 80px;
 }
 .bar-title {
   font-size: larger;

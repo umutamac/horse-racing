@@ -8,7 +8,7 @@
       >
         <div class="round-title">{{ getRoundTitle(roundIndex + 1, roundName) }}</div>
         <div style="display: grid; grid-template-columns: auto 1fr">
-          <div class="list-item list-header">Position</div>
+          <div class="list-item list-header">Lane</div>
           <div class="list-item list-header">Name</div>
           <template
             v-for="(roundItem, roundItemIndex) in getRound(roundName)"
@@ -24,16 +24,18 @@
 </template>
 
 <script setup lang="ts">
-import type { Program, Lane, LapName } from '@/types'
+import type { Program, Lane, LapName, Horse } from '@/types'
 
 type Props = {
   program: Program
+  horses: Horse[]
 }
 const props = defineProps<Props>()
 
 function getHorseName(id: string): string {
+  const horse = props.horses.find((h) => h.id == id)
+  return horse ? horse.name : '-'
   // TODO: search from store
-  return id
 }
 
 function getRoundTitle(roundNum: number, name: string): string {
@@ -55,10 +57,6 @@ function getRound(name: string): Lane[] {
 </script>
 
 <style scoped>
-.scroll-container {
-  height: 100%; /* or a fixed height like 300px */
-  overflow-y: scroll;
-}
 .title {
   background-color: blue;
   color: black;

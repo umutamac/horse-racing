@@ -3,69 +3,33 @@
     <div style="color: black">status: {{ props.status }}</div>
 
     <div ref="containerRef" class="animation-container">
-      <div class="lane-container lane-border">
-        <div class="lane-start">1</div>
-        <div class="horse-avatar" :style="getAnimatedHorseStyleFromLaneNo(1)"></div>
-      </div>
-      <div class="lane-container lane-border">
-        <div class="lane-start">2</div>
-        <div class="horse-avatar" :style="getAnimatedHorseStyleFromLaneNo(2)"></div>
-      </div>
-      <div class="lane-container lane-border">
-        <div class="lane-start">3</div>
-        <div class="horse-avatar" :style="getAnimatedHorseStyleFromLaneNo(3)"></div>
-      </div>
-      <div class="lane-container lane-border">
-        <div class="lane-start">4</div>
-        <div class="horse-avatar" :style="getAnimatedHorseStyleFromLaneNo(4)"></div>
-      </div>
-      <div class="lane-container lane-border">
-        <div class="lane-start">5</div>
-        <div class="horse-avatar" :style="getAnimatedHorseStyleFromLaneNo(5)"></div>
-      </div>
-      <div class="lane-container lane-border">
-        <div class="lane-start">6</div>
-        <div class="horse-avatar" :style="getAnimatedHorseStyleFromLaneNo(6)"></div>
-      </div>
-      <div class="lane-container lane-border">
-        <div class="lane-start">7</div>
-        <div class="horse-avatar" :style="getAnimatedHorseStyleFromLaneNo(7)"></div>
-      </div>
-      <div class="lane-container lane-border">
-        <div class="lane-start">8</div>
-        <div class="horse-avatar" :style="getAnimatedHorseStyleFromLaneNo(8)"></div>
-      </div>
-      <div class="lane-container lane-border">
-        <div class="lane-start">9</div>
-        <div class="horse-avatar" :style="getAnimatedHorseStyleFromLaneNo(9)"></div>
-      </div>
-      <div class="lane-container lane-border">
-        <div class="lane-start">10</div>
-        <div class="horse-avatar" :style="getAnimatedHorseStyleFromLaneNo(10)"></div>
-      </div>
-      <!-- <div
-        v-for="(horse, index) in animatedHorses"
-        :key="`horse_${index}_${horse.horseId}`"
+      <div
+        v-for="index in Array.from(Array(10).keys())"
+        :key="`lane_${index}`"
         class="lane-container lane-border"
-      ></div> -->
+      >
+        <div class="lane-start">{{ index + 1 }}</div>
+        <div class="horse-avatar" :style="getAnimatedHorseStyleFromLaneNo(index + 1)"></div>
+      </div>
     </div>
 
-    <div style="display: flex; justify-content: space-between; color: red; margin-top: 50px">
+    <div class="bottom-row">
       <div></div>
-      <div>lap {{ roundName }}</div>
-      <div>finish</div>
+      <div>{{ PROGRAM.getRoundTitle(roundIndex + 1, roundName) }}</div>
+      <div>FINISH</div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
-import type { Program, LapName, Result, AnimatedHorse } from '@/types'
-import { HORSE, RESULT } from '@/utils'
+import type { Program, LapName, Result, AnimatedHorse, Horse } from '@/types'
+import { HORSE, RESULT, PROGRAM } from '@/utils'
 
 type Props = {
   status: 'running' | 'paused'
   program: Program
+  horses: Horse[]
   resetTrigger: number
 }
 const props = defineProps<Props>()
@@ -91,7 +55,7 @@ let animationFrameId: number
 function updateContainerWidth() {
   if (containerRef.value) {
     containerWidth.value = containerRef.value.offsetWidth - 50 // minus margin for horse
-    console.log('containerWidth', containerWidth.value)
+    //console.log('containerWidth', containerWidth.value)
   }
 }
 
@@ -99,21 +63,21 @@ function getAnimatedHorseStyleFromLaneNo(lane: number) {
   const horse = animatedHorses.value.find((horse) => horse.lane == lane)
   if (!horse) {
     console.warn(`horse at lane ${lane} not found`)
-    return
+    return {} // no bg-color before a program is set
   }
   //console.log('hop1')
   return {
-    backgroundColor: 'black', //getHorseColor(horse.horseId),
+    'background-color': getHorseColor(horse.horseId),
     transform: `translateX(${(horse.positionPercent / 100) * containerWidth.value}px)`,
   }
 }
 
-// function getHorseColor(id: string): string {
-//   //console.log('getting horse by id:', id)
-//   return 'black'
-//   // const horse: Horse = store.getters.getHorseById(id)
-//   // return horse.color
-// }
+function getHorseColor(id: string): string {
+  const horse = props.horses.find((h) => h.id == id)
+  return horse ? horse.color : 'black'
+  // const horse: Horse = store.getters.getHorseById(id)
+  // return horse.color
+}
 
 function initHorses() {
   const lanes = props.program[roundName.value]
@@ -215,6 +179,7 @@ onUnmounted(() => {
 <style scoped>
 .animation-container {
   border-right: red 5px solid;
+  padding-top: 30px;
 
   display: grid;
   grid-template-columns: 1fr;
@@ -232,17 +197,27 @@ onUnmounted(() => {
 }
 
 .lane-start {
-  width: 20px;
-  height: 50px;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding: 25px 5px;
   text-align: center;
-  background-color: darkgreen;
+  background-color: rgba(5, 119, 5, 0.589);
   color: white;
 }
 
 .horse-avatar {
   height: 25px;
   width: 25px;
-  background-color: black;
+  /* background-color: black; */
   margin: auto 0px;
+}
+.bottom-row {
+  display: flex;
+  justify-content: space-between;
+  color: red;
+  margin-top: 20px;
+}
+.bottom-row > div {
+  font-weight: 500;
 }
 </style>
