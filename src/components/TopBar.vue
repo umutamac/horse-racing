@@ -9,15 +9,14 @@
 </template>
 
 <script setup lang="ts">
-// import { defineEmits } from 'vue'
 type Props = {
-  status: 'started' | 'paused'
+  status: 'running' | 'paused'
 }
 const props = defineProps<Props>()
 
 type Emit = {
   (e: 'generateProgram'): void
-  (e: 'update:status', value: string): void
+  (e: 'update:status', value: 'running' | 'paused'): void
 }
 const emit = defineEmits<Emit>()
 
@@ -28,11 +27,11 @@ function generateProgram() {
 
 function toggleStatus() {
   switch (props.status) {
-    case 'started':
+    case 'running':
       emit('update:status', 'paused')
       break
     case 'paused':
-      emit('update:status', 'started')
+      emit('update:status', 'running')
       break
     default:
       console.log('status', props.status)

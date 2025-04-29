@@ -5,3 +5,9 @@ export type Horse = {
     color: string;
 };
 
+export type AnimatedHorse = {
+    lane: number
+    horseId: string
+    speed: number // percent per frame
+    positionPercent: number
+}

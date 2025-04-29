@@ -11,10 +11,10 @@
           <div class="list-item list-header">Position</div>
           <div class="list-item list-header">Name</div>
           <template
-            v-for="(roundItem, roundItemIndex) in props.program[roundName]"
+            v-for="(roundItem, roundItemIndex) in getRound(roundName)"
             :key="`round_item_${roundItemIndex}_${roundItem.horseId}`"
           >
-            <div class="list-item">{{ roundItem.lane }}</div>
+            <div class="list-item">{{ roundItem.laneNo }}</div>
             <div class="list-item">{{ getHorseName(roundItem.horseId) }}</div>
           </template>
         </div>
@@ -24,19 +24,19 @@
 </template>
 
 <script setup lang="ts">
-import type { Program, RoundName } from '../types/_race-program'
+import type { Program, Lane, LapName } from '@/types'
 
 type Props = {
   program: Program
 }
 const props = defineProps<Props>()
 
-function getHorseName(id: string) {
+function getHorseName(id: string): string {
   // TODO: search from store
   return id
 }
 
-function getRoundTitle(roundNum: number, name: RoundName) {
+function getRoundTitle(roundNum: number, name: string): string {
   switch (roundNum) {
     case 1:
       return `1st Lap - ${name}`
@@ -47,6 +47,10 @@ function getRoundTitle(roundNum: number, name: RoundName) {
     default:
       return `${roundNum}th Lap - ${name}`
   }
+}
+
+function getRound(name: string): Lane[] {
+  return [...props.program[name as LapName]]
 }
 </script>
 
@@ -62,6 +66,7 @@ function getRoundTitle(roundNum: number, name: RoundName) {
   font-weight: 600;
   font-size: x-large;
   padding: 10px auto;
+  border: 1px solid gray;
 }
 .round-title {
   background-color: red;
@@ -85,7 +90,7 @@ function getRoundTitle(roundNum: number, name: RoundName) {
   border-right: 1px solid gray;
 }
 .list-header {
-  background-color: gray;
+  background-color: rgb(218, 218, 218);
   font-weight: 500;
 }
 </style>

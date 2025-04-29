@@ -1,30 +1,17 @@
 
-export type Round = {
+export type Lane = {
     horseId: string;
-    lane: number;
-}[];
+    laneNo: number;
+};
 
 export type Program = {
-    "1200m": Round;
-    "1400m": Round;
-    "1600m": Round;
-    "1800m": Round;
-    "2000m": Round;
-    "2200m": Round;
+    "1200m": Lane[];
+    "1400m": Lane[];
+    "1600m": Lane[];
+    "1800m": Lane[];
+    "2000m": Lane[];
+    "2200m": Lane[];
 }
 
-export type RoundName = keyof Program
+export type LapName = keyof Program
 
-export type Result = {
-    horseId: string;
-    position: number;
-}[];
-
-export type Results = {
-    "1200m": Result;
-    "1400m": Result;
-    "1600m": Result;
-    "1800m": Result;
-    "2000m": Result;
-    "2200m": Result;
-}

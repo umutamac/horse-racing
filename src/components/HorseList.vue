@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { Horse } from '../types/_horse'
+import type { Horse } from '@/types'
 
 type Props = {
   horseList: Horse[]
@@ -30,6 +30,7 @@ const props = withDefaults(defineProps<Props>(), {
   background-color: yellow;
   color: black;
   padding: 5px;
+  border: 1px solid gray;
 }
 .horse-list {
   display: grid;
@@ -55,7 +56,7 @@ const props = withDefaults(defineProps<Props>(), {
   border-right: 1px solid gray;
 }
 .list-header {
-  background-color: gray;
+  background-color: rgb(218, 218, 218);
   font-weight: 500;
 }
 </style>

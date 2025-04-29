@@ -1,14 +1,5 @@
-import type { Round, Program, Results } from "@/types/_race-program";
-import type { Horse } from "@/types/_horse";
-
-function shuffleArray<T>(array: T[]): T[] {
-    const shuffledArray = [...array];
-    for (let i = shuffledArray.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
-    }
-    return shuffledArray;
-}
+import type { Lane, Program, Horse } from "@/types";
+import { shuffleArray } from "./util"
 
 // Function to randomly select 10 items from an array of 20
 function selectRandomItems<T>(array: T[], numItems: number): T[] {
@@ -16,35 +7,31 @@ function selectRandomItems<T>(array: T[], numItems: number): T[] {
     return shuffled.slice(0, numItems);  // Return the first `numItems` elements
 }
 
-function createRound(horses: Horse[]): Round {
+function createRound(horses: Horse[]): Lane[] {
     const shuffledHorses = shuffleArray(horses);  // Shuffle to randomize lane assignments
     return shuffledHorses.map((horse, index) => ({
         horseId: horse.id,
-        lane: index + 1  // Assign lane numbers from 1 to 10 (or more if needed)
+        laneNo: index + 1  // Assign lane numbers from 1 to 10 (or more if needed)
     }));
 }
 
 // Main function to build the program
 export function buildProgram(horsePool: Horse[]): Program {
+    const round = createRound(selectRandomItems(horsePool, 10));
+    // use the same set of horses for all rounds
     const program: Program = {
-        "1200m": createRound(selectRandomItems(horsePool, 10)),
-        "1400m": createRound(selectRandomItems(horsePool, 10)),
-        "1600m": createRound(selectRandomItems(horsePool, 10)),
-        "1800m": createRound(selectRandomItems(horsePool, 10)),
-        "2000m": createRound(selectRandomItems(horsePool, 10)),
-        "2200m": createRound(selectRandomItems(horsePool, 10))
+        "1200m": round,
+        "1400m": round,
+        "1600m": round,
+        "1800m": round,
+        "2000m": round,
+        "2200m": round
     };
-
     return program;
 }
 
-export function buildEmptyResults(): Results {
-    return {
-        "1200m": [],
-        "1400m": [],
-        "1600m": [],
-        "1800m": [],
-        "2000m": [],
-        "2200m": []
-    }
+
+export function isProgramEmpty(program: Program): boolean {
+    return !Object.values(program).every(lap => lap.length == 10);
 }
+

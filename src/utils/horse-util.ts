@@ -1,6 +1,5 @@
-import type { Horse } from "@/types/_horse";
+import type { Lane, Result, AnimatedHorse, Horse } from "@/types";
 
-// Pre-determined list of horse names (adjust as necessary)
 const horseNames = [
     "Thunder", "Blaze", "Storm", "Shadow", "Comet", "Spirit", "Champion", "Zephyr", "Echo", "Bolt",
     "Rusty", "Phantom", "Flame", "Copper", "Jet", "Tornado", "Twilight", "Lightning", "Maverick", "Cinnamon"
@@ -44,7 +43,6 @@ export function generateHorses(): Horse[] {
         // Generate a random condition value between 1 and 100
         const condition = Math.floor(Math.random() * 100) + 1;
 
-        // Create the horse object
         const horse: Horse = {
             id,
             name,
@@ -52,8 +50,34 @@ export function generateHorses(): Horse[] {
             color
         };
 
-        horses.push(horse);  // Add to the result array
+        horses.push(horse);
     }
 
     return horses;
+}
+
+
+export function createAnimatedHorses(lanes: Lane[], results: Result[]): AnimatedHorse[] {
+    const baseSpeed = 0.5 // % per frame
+    const decrement = 0.04
+
+    const horseById = new Map(results.map((r, i) => [r.horseId, baseSpeed - i * decrement]))
+
+    return lanes
+        .map((lane) => ({
+            horseId: lane.horseId,
+            lane: lane.laneNo,
+            speed: horseById.get(lane.horseId) ?? 1,
+            positionPercent: 0,
+        }))
+        .sort((a, b) => a.lane - b.lane)
+}
+
+export function bPlaceholderAnimatedHorses(): AnimatedHorse[] {
+    return Array.from(Array(10).keys()).map(i => ({
+        lane: i,
+        horseId: "",
+        speed: 0,
+        positionPercent: 0
+    }))
 }
