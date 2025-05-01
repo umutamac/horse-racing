@@ -20,7 +20,10 @@ import type { Horse } from "@/types";
 import { useStore } from "@/store";
 
 const store = useStore();
-const horses = computed<Horse[]>(() => store.getters.allHorses);
+const horses = computed<Horse[]>(() => {
+  //console.log("store", store);
+  return store.getters.allHorses;
+});
 </script>
 
 <style scoped>

@@ -23,14 +23,14 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 import { PROGRAM, HORSE, RESULT } from "@/utils";
-import type { Horse, Program, ProgramResults, Result, LapName } from "@/types";
+import type { Horse, Program, ProgramResults, Result, LapName, Status } from "@/types";
 import { useStore } from "@/store";
 
 const store = useStore();
 
 //const horses = ref<Horse[]>(HORSE.generateHorses());
 const program = ref<Program>(PROGRAM.buildProgram([]));
-const status = ref<"running" | "paused">("paused");
+const status = ref<Status>("paused");
 const results = ref<ProgramResults>(RESULT.buildEmptyResults());
 const resetTrigger = ref(0);
 

@@ -22,15 +22,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted, computed } from "vue";
-import type { Program, LapName, Result, AnimatedHorse, Horse } from "@/types";
+import { ref, watch, onMounted, onUnmounted, computed, nextTick } from "vue";
+import type { Program, LapName, Result, AnimatedHorse, Horse, Status } from "@/types";
 import { HORSE, RESULT, PROGRAM } from "@/utils";
 import { useStore } from "@/store";
 
 const store = useStore();
 
 type Props = {
-  status: "running" | "paused";
+  status: Status;
   program: Program;
   resetTrigger: number;
 };
@@ -143,7 +143,7 @@ function handleLapFinish() {
 // Watch status prop
 watch(
   () => props.status,
-  (newValue: "running" | "paused") => {
+  (newValue) => {
     if (newValue === "running") {
       startAnimation();
     } else if (newValue === "paused") {
@@ -168,7 +168,11 @@ watch(
 
 onMounted(() => {
   initHorses();
-  updateContainerWidth();
+  
+  nextTick(() => {
+    updateContainerWidth();
+  });
+
   window.addEventListener("resize", updateContainerWidth);
 });
 

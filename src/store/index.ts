@@ -1,23 +1,23 @@
-import type { Horse } from "@/types";
+import type { Horse, Status } from "@/types";
 import { type InjectionKey } from "vue";
 import { createStore, useStore as baseUseStore } from "vuex";
 
 export interface State {
-  count: number;
   horses: Horse[];
+  status: Status;
 }
 
 export const store = createStore({
   state: (): State => ({
-    count: 0,
     horses: [],
+    status: "paused",
   }),
   mutations: {
-    increment(state: State) {
-      state.count++;
-    },
     setHorses(state: State, horses: Horse[]) {
       state.horses = horses;
+    },
+    setStatus(state: State, status: Status) {
+      state.status = status;
     },
   },
   actions: {
@@ -28,14 +28,15 @@ export const store = createStore({
     // }
   },
   getters: {
-    doubleCount: (state: State) => state.count * 2,
-
     allHorses(state: State) {
       return state.horses;
     },
     getHorseById: (state: State) => (id: string) => {
       return state.horses.find(horse => horse.id === id);
     },
+    // status(state : State) {
+    //   return state.status;
+    // },
   },
 });
 
