@@ -1,15 +1,11 @@
 import type { Horse } from "@/types";
-// import { type InjectionKey } from 'vue'
-import { createStore } from "vuex";
-// import type { Store } from 'vuex';
+import { type InjectionKey } from "vue";
+import { createStore, useStore as baseUseStore } from "vuex";
 
 export interface State {
   count: number;
   horses: Horse[];
 }
-
-// Define injection key
-// export const key: InjectionKey<Store<State>> = Symbol();
 
 export const store = createStore({
   state: (): State => ({
@@ -42,3 +38,11 @@ export const store = createStore({
     },
   },
 });
+
+// Define injection key
+export const key = Symbol() as InjectionKey<ReturnType<typeof createStore>>;
+
+// store.ts
+export function useStore() {
+  return baseUseStore(key);
+}

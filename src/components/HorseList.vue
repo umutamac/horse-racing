@@ -1,11 +1,11 @@
 <template>
   <div class="bar-container">
-    <div class="title">Horse List (1-{{ props.horses.length }})</div>
+    <div class="title">Horse List (1-{{ horses.length }})</div>
     <div class="horse-list">
       <div class="list-item list-header">Name</div>
       <div class="list-item list-header">Condition</div>
       <div class="list-item list-header">Color</div>
-      <template v-for="(horse, index) in props.horses" :key="`horse_${index}_${horse.id}`">
+      <template v-for="(horse, index) in horses" :key="`horse_${index}_${horse.id}`">
         <div class="list-item">{{ horse.name }}</div>
         <div class="list-item">{{ horse.condition }}</div>
         <div class="list-item">{{ horse.color }}</div>
@@ -15,14 +15,12 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import type { Horse } from "@/types";
+import { useStore } from "@/store";
 
-type Props = {
-  horses: Horse[];
-};
-const props = withDefaults(defineProps<Props>(), {
-  horses: () => [],
-});
+const store = useStore();
+const horses = computed<Horse[]>(() => store.getters.allHorses);
 </script>
 
 <style scoped>

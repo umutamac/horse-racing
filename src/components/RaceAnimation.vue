@@ -25,18 +25,20 @@
 import { ref, watch, onMounted, onUnmounted, computed } from "vue";
 import type { Program, LapName, Result, AnimatedHorse, Horse } from "@/types";
 import { HORSE, RESULT, PROGRAM } from "@/utils";
+import { useStore } from "@/store";
+
+const store = useStore();
 
 type Props = {
   status: "running" | "paused";
   program: Program;
-  horses: Horse[];
   resetTrigger: number;
 };
 const props = defineProps<Props>();
 
 type Emit = {
   (e: "update:result", value: { roundName: LapName; results: Result[] }): void;
-  (e: "update:status", value: "running" | "paused"): void;
+  (e: "pause"): void;
 };
 const emit = defineEmits<Emit>();
 
@@ -48,6 +50,8 @@ const roundName = computed(() => roundOrder[roundIndex.value]);
 
 const containerRef = ref<HTMLElement | null>(null);
 const containerWidth = ref(0);
+
+const horses = computed<Horse[]>(() => store.getters.allHorses);
 
 let animationFrameId: number;
 //const finishLine = 800 // Pixels to reach finish line (adjust as needed)
@@ -73,10 +77,8 @@ function getAnimatedHorseStyleFromLaneNo(lane: number) {
 }
 
 function getHorseColor(id: string): string {
-  const horse = props.horses.find(h => h.id == id);
+  const horse = horses.value.find(h => h.id == id);
   return horse ? horse.color : "black";
-  // const horse: Horse = store.getters.getHorseById(id)
-  // return horse.color
 }
 
 function initHorses() {
@@ -133,7 +135,7 @@ function handleLapFinish() {
       startAnimation();
     }
   } else {
-    emit("update:status", "paused");
+    emit("pause");
     console.log("All races finished!");
   }
 }

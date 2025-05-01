@@ -49,20 +49,24 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import type { ProgramResults, LapName, Horse, Program, Lane } from "@/types";
 import { PROGRAM } from "@/utils";
+import { useStore } from "@/store";
+
+const store = useStore();
 
 type Props = {
   program: Program;
   results: ProgramResults;
-  horses: Horse[];
 };
 const props = defineProps<Props>();
 
+const horses = computed<Horse[]>(() => store.getters.allHorses);
+
 function getHorseName(id: string) {
-  const horse = props.horses.find(h => h.id == id);
+  const horse = horses.value.find(h => h.id == id);
   return horse ? horse.name : "-";
-  // TODO: search from store
 }
 
 function getRoundTitle(roundNum: number, name: string): string {

@@ -1,42 +1,13 @@
 <template>
   <div class="bar-container">
     <div class="bar-title">Horse Racing</div>
-    <div>
-      <button @click="generateProgram" class="buttons">Generate Program</button>
-      <button @click="toggleStatus" class="buttons">Start / Pause</button>
+    <div class="buttons-container">
+      <slot></slot>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-type Props = {
-  status: "running" | "paused";
-};
-const props = defineProps<Props>();
-
-type Emit = {
-  (e: "generateProgram"): void;
-  (e: "update:status", value: "running" | "paused"): void;
-};
-const emit = defineEmits<Emit>();
-
-function generateProgram() {
-  console.log("generateProgram");
-  emit("generateProgram");
-}
-
-function toggleStatus() {
-  switch (props.status) {
-    case "running":
-      emit("update:status", "paused");
-      break;
-    case "paused":
-      emit("update:status", "running");
-      break;
-    default:
-      console.log("status", props.status);
-  }
-}
 </script>
 
 <style scoped>
@@ -55,7 +26,7 @@ function toggleStatus() {
   font-size: larger;
   font-weight: 500;
 }
-.buttons {
+.buttons-container > * {
   margin: 0px 10px;
 }
 </style>
