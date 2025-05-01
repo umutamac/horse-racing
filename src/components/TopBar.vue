@@ -10,31 +10,31 @@
 
 <script setup lang="ts">
 type Props = {
-  status: 'running' | 'paused'
-}
-const props = defineProps<Props>()
+  status: "running" | "paused";
+};
+const props = defineProps<Props>();
 
 type Emit = {
-  (e: 'generateProgram'): void
-  (e: 'update:status', value: 'running' | 'paused'): void
-}
-const emit = defineEmits<Emit>()
+  (e: "generateProgram"): void;
+  (e: "update:status", value: "running" | "paused"): void;
+};
+const emit = defineEmits<Emit>();
 
 function generateProgram() {
-  console.log('generateProgram')
-  emit('generateProgram')
+  console.log("generateProgram");
+  emit("generateProgram");
 }
 
 function toggleStatus() {
   switch (props.status) {
-    case 'running':
-      emit('update:status', 'paused')
-      break
-    case 'paused':
-      emit('update:status', 'running')
-      break
+    case "running":
+      emit("update:status", "paused");
+      break;
+    case "paused":
+      emit("update:status", "running");
+      break;
     default:
-      console.log('status', props.status)
+      console.log("status", props.status);
   }
 }
 </script>

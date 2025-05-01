@@ -24,35 +24,35 @@
 </template>
 
 <script setup lang="ts">
-import type { Program, Lane, LapName, Horse } from '@/types'
+import type { Program, Lane, LapName, Horse } from "@/types";
 
 type Props = {
-  program: Program
-  horses: Horse[]
-}
-const props = defineProps<Props>()
+  program: Program;
+  horses: Horse[];
+};
+const props = defineProps<Props>();
 
 function getHorseName(id: string): string {
-  const horse = props.horses.find((h) => h.id == id)
-  return horse ? horse.name : '-'
+  const horse = props.horses.find(h => h.id == id);
+  return horse ? horse.name : "-";
   // TODO: search from store
 }
 
 function getRoundTitle(roundNum: number, name: string): string {
   switch (roundNum) {
     case 1:
-      return `1st Lap - ${name}`
+      return `1st Lap - ${name}`;
     case 2:
-      return `2nd Lap - ${name}`
+      return `2nd Lap - ${name}`;
     case 3:
-      return `3rd Lap - ${name}`
+      return `3rd Lap - ${name}`;
     default:
-      return `${roundNum}th Lap - ${name}`
+      return `${roundNum}th Lap - ${name}`;
   }
 }
 
 function getRound(name: string): Lane[] {
-  return [...props.program[name as LapName]]
+  return [...props.program[name as LapName]];
 }
 </script>
 

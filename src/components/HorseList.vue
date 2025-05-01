@@ -15,14 +15,14 @@
 </template>
 
 <script setup lang="ts">
-import type { Horse } from '@/types'
+import type { Horse } from "@/types";
 
 type Props = {
-  horses: Horse[]
-}
+  horses: Horse[];
+};
 const props = withDefaults(defineProps<Props>(), {
   horses: () => [],
-})
+});
 </script>
 
 <style scoped>

@@ -22,97 +22,97 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
-import type { Program, LapName, Result, AnimatedHorse, Horse } from '@/types'
-import { HORSE, RESULT, PROGRAM } from '@/utils'
+import { ref, watch, onMounted, onUnmounted, computed } from "vue";
+import type { Program, LapName, Result, AnimatedHorse, Horse } from "@/types";
+import { HORSE, RESULT, PROGRAM } from "@/utils";
 
 type Props = {
-  status: 'running' | 'paused'
-  program: Program
-  horses: Horse[]
-  resetTrigger: number
-}
-const props = defineProps<Props>()
+  status: "running" | "paused";
+  program: Program;
+  horses: Horse[];
+  resetTrigger: number;
+};
+const props = defineProps<Props>();
 
 type Emit = {
-  (e: 'update:result', value: { roundName: LapName; results: Result[] }): void
-  (e: 'update:status', value: 'running' | 'paused'): void
-}
-const emit = defineEmits<Emit>()
+  (e: "update:result", value: { roundName: LapName; results: Result[] }): void;
+  (e: "update:status", value: "running" | "paused"): void;
+};
+const emit = defineEmits<Emit>();
 
-const animatedHorses = ref<AnimatedHorse[]>(HORSE.bPlaceholderAnimatedHorses())
+const animatedHorses = ref<AnimatedHorse[]>(HORSE.bPlaceholderAnimatedHorses());
 
-const roundOrder: LapName[] = ['1200m', '1400m', '1600m', '1800m', '2000m', '2200m']
-const roundIndex = ref(0)
-const roundName = computed(() => roundOrder[roundIndex.value])
+const roundOrder: LapName[] = ["1200m", "1400m", "1600m", "1800m", "2000m", "2200m"];
+const roundIndex = ref(0);
+const roundName = computed(() => roundOrder[roundIndex.value]);
 
-const containerRef = ref<HTMLElement | null>(null)
-const containerWidth = ref(0)
+const containerRef = ref<HTMLElement | null>(null);
+const containerWidth = ref(0);
 
-let animationFrameId: number
+let animationFrameId: number;
 //const finishLine = 800 // Pixels to reach finish line (adjust as needed)
 
 function updateContainerWidth() {
   if (containerRef.value) {
-    containerWidth.value = containerRef.value.offsetWidth - 50 // minus margin for horse
+    containerWidth.value = containerRef.value.offsetWidth - 50; // minus margin for horse
     //console.log('containerWidth', containerWidth.value)
   }
 }
 
 function getAnimatedHorseStyleFromLaneNo(lane: number) {
-  const horse = animatedHorses.value.find((horse) => horse.lane == lane)
+  const horse = animatedHorses.value.find(horse => horse.lane == lane);
   if (!horse) {
-    console.warn(`horse at lane ${lane} not found`)
-    return {} // no bg-color before a program is set
+    console.warn(`horse at lane ${lane} not found`);
+    return {}; // no bg-color before a program is set
   }
   //console.log('hop1')
   return {
-    'background-color': getHorseColor(horse.horseId),
+    "background-color": getHorseColor(horse.horseId),
     transform: `translateX(${(horse.positionPercent / 100) * containerWidth.value}px)`,
-  }
+  };
 }
 
 function getHorseColor(id: string): string {
-  const horse = props.horses.find((h) => h.id == id)
-  return horse ? horse.color : 'black'
+  const horse = props.horses.find(h => h.id == id);
+  return horse ? horse.color : "black";
   // const horse: Horse = store.getters.getHorseById(id)
   // return horse.color
 }
 
 function initHorses() {
-  const lanes = props.program[roundName.value]
-  const lapResults = RESULT.generateLapResult(lanes)
-  animatedHorses.value = HORSE.createAnimatedHorses(lanes, lapResults)
+  const lanes = props.program[roundName.value];
+  const lapResults = RESULT.generateLapResult(lanes);
+  animatedHorses.value = HORSE.createAnimatedHorses(lanes, lapResults);
 }
 
 // Animation loop
 function animate() {
-  let allFinished = true
+  let allFinished = true;
 
-  animatedHorses.value.forEach((horse) => {
+  animatedHorses.value.forEach(horse => {
     if (horse.positionPercent < 100) {
-      horse.positionPercent += horse.speed
-      if (horse.positionPercent > 100) horse.positionPercent = 100
-      allFinished = false
+      horse.positionPercent += horse.speed;
+      if (horse.positionPercent > 100) horse.positionPercent = 100;
+      allFinished = false;
     }
-  })
+  });
 
   if (allFinished) {
-    handleLapFinish()
+    handleLapFinish();
   } else {
-    animationFrameId = requestAnimationFrame(animate)
+    animationFrameId = requestAnimationFrame(animate);
   }
 }
 
 // Start animation loop
 function startAnimation() {
-  cancelAnimationFrame(animationFrameId) // Cancel any old animation
-  animationFrameId = requestAnimationFrame(animate)
+  cancelAnimationFrame(animationFrameId); // Cancel any old animation
+  animationFrameId = requestAnimationFrame(animate);
 }
 
 // Stop animation
 function stopAnimation() {
-  cancelAnimationFrame(animationFrameId)
+  cancelAnimationFrame(animationFrameId);
 }
 
 function handleLapFinish() {
@@ -122,58 +122,58 @@ function handleLapFinish() {
     .map((horse, index) => ({
       horseId: horse.horseId,
       position: index + 1,
-    }))
+    }));
 
-  emit('update:result', { roundName: roundName.value, results })
+  emit("update:result", { roundName: roundName.value, results });
 
   if (roundIndex.value < roundOrder.length - 1) {
-    roundIndex.value++
-    initHorses()
-    if (props.status === 'running') {
-      startAnimation()
+    roundIndex.value++;
+    initHorses();
+    if (props.status === "running") {
+      startAnimation();
     }
   } else {
-    emit('update:status', 'paused')
-    console.log('All races finished!')
+    emit("update:status", "paused");
+    console.log("All races finished!");
   }
 }
 
 // Watch status prop
 watch(
   () => props.status,
-  (newValue: 'running' | 'paused') => {
-    if (newValue === 'running') {
-      startAnimation()
-    } else if (newValue === 'paused') {
-      stopAnimation()
+  (newValue: "running" | "paused") => {
+    if (newValue === "running") {
+      startAnimation();
+    } else if (newValue === "paused") {
+      stopAnimation();
     }
   },
-  { immediate: true },
-)
+  { immediate: true }
+);
 
 watch(
   () => props.resetTrigger,
   () => {
-    roundIndex.value = 0
-    initHorses()
-    if (props.status === 'running') {
-      startAnimation()
+    roundIndex.value = 0;
+    initHorses();
+    if (props.status === "running") {
+      startAnimation();
     } else {
-      stopAnimation()
+      stopAnimation();
     }
-  },
-)
+  }
+);
 
 onMounted(() => {
-  initHorses()
-  updateContainerWidth()
-  window.addEventListener('resize', updateContainerWidth)
-})
+  initHorses();
+  updateContainerWidth();
+  window.addEventListener("resize", updateContainerWidth);
+});
 
 onUnmounted(() => {
-  cancelAnimationFrame(animationFrameId)
-  window.removeEventListener('resize', updateContainerWidth)
-})
+  cancelAnimationFrame(animationFrameId);
+  window.removeEventListener("resize", updateContainerWidth);
+});
 </script>
 
 <style scoped>

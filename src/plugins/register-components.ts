@@ -1,4 +1,3 @@
-
 import type { App } from "vue";
 
 import TopBar from "../components/TopBar.vue";
@@ -16,7 +15,6 @@ declare module "vue" {
     // RaceResults: typeof RaceResults;
     ProgramDetails: typeof ProgramDetails;
     RaceAnimation: typeof RaceAnimation;
-
   }
 }
 
@@ -28,7 +26,6 @@ export const RegisterGlobalComponentsPlugin = {
       // .component("RacePrograms", RacePrograms)
       // .component("RaceResults", RaceResults)
       .component("ProgramDetails", ProgramDetails)
-      .component("RaceAnimation", RaceAnimation)
-
-  }
+      .component("RaceAnimation", RaceAnimation);
+  },
 };

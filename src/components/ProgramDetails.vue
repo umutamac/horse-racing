@@ -49,32 +49,32 @@
 </template>
 
 <script setup lang="ts">
-import type { ProgramResults, LapName, Horse, Program, Lane } from '@/types'
-import { PROGRAM } from '@/utils'
+import type { ProgramResults, LapName, Horse, Program, Lane } from "@/types";
+import { PROGRAM } from "@/utils";
 
 type Props = {
-  program: Program
-  results: ProgramResults
-  horses: Horse[]
-}
-const props = defineProps<Props>()
+  program: Program;
+  results: ProgramResults;
+  horses: Horse[];
+};
+const props = defineProps<Props>();
 
 function getHorseName(id: string) {
-  const horse = props.horses.find((h) => h.id == id)
-  return horse ? horse.name : '-'
+  const horse = props.horses.find(h => h.id == id);
+  return horse ? horse.name : "-";
   // TODO: search from store
 }
 
 function getRoundTitle(roundNum: number, name: string): string {
-  return PROGRAM.getRoundTitle(roundNum, name)
+  return PROGRAM.getRoundTitle(roundNum, name);
 }
 
 function getRound(name: string): Lane[] {
-  return [...props.program[name as LapName]]
+  return [...props.program[name as LapName]];
 }
 function getRoundResult(name: string) {
-  const round = [...props.results[name as LapName]]
-  return round.sort((r1, r2) => r1.position - r2.position)
+  const round = [...props.results[name as LapName]];
+  return round.sort((r1, r2) => r1.position - r2.position);
 }
 </script>
 
