@@ -1,45 +1,39 @@
-# .
+# Horse Racing Game Trial Day – Front-End Case Study
 
-This template should help get you started developing with Vue 3 in Vite.
+## Overview
+In this project, you are tasked with creating an interactive **horse racing game** with the following features:
 
-## Recommended IDE Setup
+## Requirements
+1. **Technology**: You may use **Vue.js** for this project.
+2. **Generate Horse List**: The horse list should contain between **1 to 20 horses**, randomly generated.
+3. **Generate Race Schedule**: Upon clicking the **Generate** button, a **race schedule** consisting of **6 rounds** must be created.
+4. **Start the Race**: When the **Start** button is clicked, the races should begin, running one round at a time.
+5. **Display Race Results**: The results for each race should appear in the **Results field**, shown sequentially as each race concludes.
+6. **Animated Horse Movement**: The horses should visibly **move** during each race.
+7. **Coding Style**: Please structure your code in a way that demonstrates **clean and maintainable practices**, as if for a large-scale project.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Rules and Conditions
+1. The game should have a **total of 20 horses** available for racing.
+2. Each horse should be represented with a **unique color**.
+3. Each horse's **condition score** should range from **1 to 100**.
+4. Each race should consist of **6 rounds**.
+5. For each round, select **10 random horses** from the available 20.
+6. **Round Specifications**: The rounds must occur at different lengths in the following sequence:
+    - **Round 1**: 1200 meters
+    - **Round 2**: 1400 meters
+    - **Round 3**: 1600 meters
+    - **Round 4**: 1800 meters
+    - **Round 5**: 2000 meters
+    - **Round 6**: 2200 meters
 
-## Type Support for `.vue` Imports in TS
+## Technical Expectations
+1. **Vuex Store**: Implement **state management** to handle and manage the game's data.
+2. **Component-Based Design**: Use **Vue components** to organize the structure of your code effectively.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## Additional Notes
+1. This project is an opportunity to show your approach to **component structure**, **code organization**, and how you would handle **state management** within a complex feature. Aim to write code that is **clear**, **organized**, and **adaptable** for future scaling.
+2. You are encouraged to ask questions at any time if you encounter uncertainties. **Enjoy the challenge!**
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+## Bonus Features
+1. **Unit Tests**
+2. **End-to-End (E2E) Tests**
